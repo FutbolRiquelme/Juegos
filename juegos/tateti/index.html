@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tateti Futbolero</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>⚽ Tateti Futbolero</h1>
+
+    <div class="controles-superiores">
+        <label for="dificultad">Dificultad:</label>
+        <select id="dificultad" onchange="nuevoJuego()">
+            <option value="facil">Fácil (Gigantes de Europa)</option>
+            <option value="medio" selected>Medio (Ligas Top + Copas)</option>
+            <option value="dificil">Difícil (Sudamérica + Históricos)</option>
+        </select>
+    </div>
+
+    <div class="game">
+        <div class="vacio"></div>
+
+        <div class="categoria columna" id="col1"></div>
+        <div class="categoria columna" id="col2"></div>
+        <div class="categoria columna" id="col3"></div>
+
+        <div class="categoria fila" id="row1"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+
+        <div class="categoria fila" id="row2"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+
+        <div class="categoria fila" id="row3"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+        <div class="casilla" onclick="seleccionarCasilla(this)"></div>
+    </div>
+
+    <div class="entrada">
+        <input id="jugador" placeholder="Ej: Messi, Cristiano Ronaldo..." autocomplete="off">
+        <button class="btn-enviar" onclick="comprobar()">Adivinar</button>
+        <button class="btn-nuevo" onclick="nuevoJuego()">Nuevo Tablero</button>
+    </div>
+
+    <p id="mensaje"></p>
+
+    <script src="script.js"></script>
+</body>
+</html>

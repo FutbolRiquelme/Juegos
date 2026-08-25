@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugador del Día — FutbolRiquelme</title>
+
+    <!-- Fuente Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', Arial, Helvetica, sans-serif;
+    }
+
+    :root {
+        --bg: #08111f;
+        --panel: #0d1829;
+        --panel-soft: #101c2f;
+        --gold: #f7b900;
+        --gold-bright: #ffc928;
+        --text: #f4f7fb;
+        --muted: #98a2b3;
+        --border: rgba(247, 185, 0, .27);
+        --border-soft: rgba(255,255,255,.08);
+    }
+
+    html {
+        background: var(--bg);
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        padding: 28px 16px 50px;
+    }
+
+    main {
+        width: min(900px, 100%);
+        margin: 0 auto;
+    }
+
+    /* ========================= */
+    /* Encabezado */
+    /* ========================= */
+    .header {
+        text-align: center;
+        margin: 0 auto 28px;
+    }
+
+    .header h1 {
+        color: var(--gold);
+        font-size: clamp(32px, 5vw, 48px);
+        line-height: 1.05;
+        font-weight: 800;
+        letter-spacing: .5px;
+        text-transform: uppercase;
+        text-shadow: 0 4px 18px rgba(247,185,0,.10);
+    }
+
+    .header p {
+        color: var(--muted);
+        font-size: 15px;
+        margin-top: 10px;
+    }
+
+    .date {
+        margin: 14px auto 0;
+        width: max-content;
+        padding: 6px 13px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--muted);
+        background: rgba(13,24,41,.75);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* ========================= */
+    /* Contenedor */
+    /* ========================= */
+    .card {
+        background: transparent;
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    /* ========================= */
+    /* Selector de dificultad */
+    /* ========================= */
+    .difficulty-box {
+        width: min(430px, 100%);
+        margin: 0 auto 28px;
+        padding: 11px 14px;
+        border-radius: 10px;
+        background: var(--panel);
+        border: 1px solid var(--border);
+        box-shadow: 0 7px 20px rgba(0,0,0,.16);
+    }
+
+    .difficulty-title {
+        display: inline;
+        margin-right: 8px;
+        font-size: 14px;
+        color: #dce3ed;
+        font-weight: 600;
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .difficulty-options {
+        display: inline-flex;
+        gap: 7px;
+        vertical-align: middle;
+    }
+
+    .difficulty-option input {
+        display: none;
+    }
+
+    .difficulty-option span {
+        display: block;
+        padding: 7px 10px;
+        border-radius: 7px;
+        border: 1px solid var(--border-soft);
+        background: #0b1627;
+        color: var(--muted);
+        text-align: center;
+        cursor: pointer;
+        transition: .2s;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .difficulty-option span:hover {
+        border-color: var(--border);
+        color: var(--text);
+    }
+
+    .difficulty-option input:checked + span {
+        color: var(--gold-bright);
+        border-color: var(--gold);
+        background: rgba(247,185,0,.08);
+        box-shadow: 0 0 0 1px rgba(247,185,0,.06);
+    }
+
+    .difficulty-description {
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 11px;
+        text-align: center;
+    }
+
+    /* ========================= */
+    /* Jugador / pista */
+    /* ========================= */
+    .player-box {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 18px;
+        align-items: center;
+        margin-bottom: 18px;
+        padding: 16px;
+        border-radius: 10px;
+        background: var(--panel);
+        border: 1px solid var(--border-soft);
+        box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    }
+
+    .avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 10px;
+        background: var(--panel-soft);
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .avatar .fallback {
+        font-size: 58px;
+        font-weight: 800;
+        color: #344257;
+    }
+
+    .hint-title {
+        font-size: 12px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        font-weight: 700;
+    }
+
+    .hint-big {
+        color: var(--gold);
+        font-size: 28px;
+        font-weight: 800;
+        margin: 5px 0 8px;
+    }
+
+    .hint-text {
+        color: #c2cad5;
+        line-height: 1.55;
+        font-size: 14px;
+    }
+
+    .counter {
+        font-size: 13px;
+        color: var(--gold-bright);
+        margin-top: 11px;
+        font-weight: 700;
+    }
+
+    /* ========================= */
+    /* Buscador */
+    /* ========================= */
+    .search {
+        position: relative;
+    }
+
+    .search input {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 999px;
+        border: 1px solid var(--gold);
+        background: #060d18;
+        color: white;
+        outline: none;
+        font-size: 14px;
+        transition: .2s;
+    }
+
+    .search input::placeholder {
+        color: #667085;
+    }
+
+    .search input:focus {
+        border-color: var(--gold-bright);
+        box-shadow: 0 0 0 3px rgba(247,185,0,.08);
+    }
+
+    .suggestions {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 58px;
+        z-index: 15;
+        background: #0c1728;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        overflow: hidden;
+        display: none;
+        max-height: 250px;
+        overflow-y: auto;
+        box-shadow: 0 12px 25px rgba(0,0,0,.25);
+    }
+
+    .suggestion {
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        border-bottom: 1px solid var(--border-soft);
+        transition: .15s;
+    }
+
+    .suggestion:hover {
+        background: rgba(247,185,0,.07);
+    }
+
+    .suggestion small {
+        color: var(--muted);
+    }
+
+    /* ========================= */
+    /* Botones */
+    /* ========================= */
+    .button-group {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+        margin-top: 12px;
+    }
+
+    button {
+        min-height: 46px;
+        border: 1px solid var(--gold);
+        border-radius: 0;
+        padding: 0 18px;
+        font-weight: 700;
+        font-size: 13px;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+    #guessBtn {
+        background: var(--gold);
+        color: #08111f;
+        box-shadow: none;
+    }
+
+    #guessBtn:hover {
+        background: var(--gold-bright);
+        transform: translateY(-1px);
+    }
+
+    #giveUp {
+        background: transparent;
+        color: var(--gold);
+    }
+
+    #giveUp:hover {
+        background: rgba(247,185,0,.08);
+    }
+
+    /* ========================= */
+    /* Resultados */
+    /* ========================= */
+    .guesses {
+        margin-top: 28px;
+    }
+
+    .guess-card {
+        border: 1px solid var(--border-soft);
+        border-radius: 10px;
+        padding: 14px;
+        background: var(--panel);
+        margin-top: 12px;
+    }
+
+    .guess-name {
+        color: var(--gold);
+        font-weight: 800;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .pills {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .pill {
+        padding: 10px 7px;
+        border-radius: 8px;
+        text-align: center;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid var(--border-soft);
+        background: #0b1627;
+    }
+
+    .pill b {
+        display: block;
+        font-size: 9px;
+        color: var(--muted);
+        margin-bottom: 4px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .correct {
+        background: rgba(46, 204, 113, .14);
+        border-color: rgba(46, 204, 113, .55);
+        color: #7dffb2;
+    }
+
+    .partial {
+        background: rgba(247, 185, 0, .13);
+        border-color: rgba(247, 185, 0, .55);
+        color: #ffd85c;
+    }
+
+    .incorrect {
+        background: rgba(239, 83, 80, .13);
+        border-color: rgba(239, 83, 80, .45);
+        color: #ffaaa8;
+    }
+
+    .result {
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: 10px;
+        display: none;
+        text-align: center;
+    }
+
+    .result.win {
+        display: block;
+        background: rgba(247,185,0,.08);
+        border: 1px solid rgba(247,185,0,.38);
+    }
+
+    .result.lose {
+        display: block;
+        background: rgba(239,83,80,.08);
+        border: 1px solid rgba(239,83,80,.30);
+    }
+
+    .result h2 {
+        color: var(--gold);
+    }
+
+    /* ========================= */
+    /* Estadísticas */
+    /* ========================= */
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin-top: 22px;
+    }
+
+    .stat {
+        border: 1px solid var(--border-soft);
+        background: var(--panel);
+        border-radius: 9px;
+        text-align: center;
+        padding: 12px;
+    }
+
+    .stat b {
+        display: block;
+        color: var(--gold);
+        font-size: 21px;
+        font-weight: 800;
+    }
+
+    .stat span {
+        font-size: 10px;
+        color: var(--muted);
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .footer {
+        text-align: center;
+        color: #667085;
+        font-size: 11px;
+        margin-top: 24px;
+    }
+
+    .shake {
+        animation: shake .35s;
+    }
+
+    @keyframes shake {
+        20% { transform: translateX(-7px) }
+        40% { transform: translateX(7px) }
+        60% { transform: translateX(-5px) }
+        80% { transform: translateX(5px) }
+    }
+
+    @media(max-width: 700px) {
+        body {
+            padding: 22px 12px 35px;
+        }
+
+        .difficulty-box {
+            text-align: center;
+        }
+
+        .difficulty-title {
+            display: block;
+            margin: 0 0 9px;
+        }
+
+        .difficulty-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .player-box {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+
+        .avatar {
+            margin: auto;
+        }
+
+        .pills {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .button-group {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media(max-width: 480px) {
+        .difficulty-options {
+            grid-template-columns: 1fr;
+        }
+
+        .button-group {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+
+    <main>
+        <section class="header">
+            <h1>⚽ JUGADOR DEL DÍA</h1>
+            <p>Tenés que descubrir al futbolista de hoy.</p>
+            <div class="date" id="date"></div>
+        </section>
+
+        <section class="card">
+            <div class="player-box">
+                <div class="avatar" id="avatar">
+                    <div class="fallback">?</div>
+                </div>
+
+                <div>
+                    <div class="hint-title">Pista inicial</div>
+                    <div class="hint-big" id="firstHint">Adiviná el jugador</div>
+                    <div class="hint-text" id="hintText">
+                        Escribí un nombre para empezar. Después de cada intento vas a recibir pistas sobre nacionalidad, posición, año de nacimiento y clubes.
+                    </div>
+                    <div class="counter" id="counter">Intentos: 0</div>
+                </div>
+            </div>
+
+            <div class="difficulty-box">
+                <span class="difficulty-title">Modo de juego</span>
+                <div class="difficulty-options">
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="hard">
+                        <span>Difícil · 5 intentos</span>
+                    </label>
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="normal" checked>
+                        <span>Normal · 10 intentos</span>
+                    </label>
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="easy">
+                        <span>Fácil · ilimitado</span>
+                    </label>
+                </div>
+                <div class="difficulty-description" id="difficultyDescription">
+                    Tenés 10 intentos para descubrir al jugador.
+                </div>
+            </div>
+
+            <div class="search">
+                <input id="search" autocomplete="off" placeholder="Escribí el nombre de un jugador..." />
+                <div class="suggestions" id="suggestions"></div>
+            </div>
+
+            <div class="button-group">
+                <button id="guessBtn">Adivinar</button>
+                <button id="giveUp">Mostrar jugador</button>
+            </div>
+
+            <div id="guesses" class="guesses"></div>
+            <div id="result" class="result"></div>
+
+            <div class="stats">
+                <div class="stat">
+                    <b id="played">0</b>
+                    <span>Jugadas</span>
+                </div>
+                <div class="stat">
+                    <b id="wins">0</b>
+                    <span>Ganadas</span>
+                </div>
+                <div class="stat">
+                    <b id="streak">0</b>
+                    <span>Racha</span>
+                </div>
+                <div class="stat">
+                    <b id="rate">0%</b>
+                    <span>Victoria</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="footer">Un jugador nuevo cada día</div>
+    </main>
+
+<script>
+/* =========================
+   JUGADORES
+========================= */
+const PLAYERS = [
+  ["Lionel Messi","Argentina","Delantero",1987,"Inter Miami"],
+  ["Cristiano Ronaldo","Portugal","Delantero",1985,"Al-Nassr"],
+  ["Neymar","Brasil","Delantero",1992,"Santos"],
+  ["Kylian Mbappé","Francia","Delantero",1998,"Real Madrid"],
+  ["Erling Haaland","Noruega","Delantero",2000,"Manchester City"],
+  ["Vinícius Júnior","Brasil","Delantero",2000,"Real Madrid"],
+  ["Jude Bellingham","Inglaterra","Mediocampista",2003,"Real Madrid"],
+  ["Lamine Yamal","España","Delantero",2007,"Barcelona"],
+  ["Rodri","España","Mediocampista",1996,"Manchester City"],
+  ["Kevin De Bruyne","Bélgica","Mediocampista",1991,"Napoli"],
+  ["Mohamed Salah","Egipto","Delantero",1992,"Liverpool"],
+  ["Harry Kane","Inglaterra","Delantero",1993,"Bayern Múnich"],
+  ["Robert Lewandowski","Polonia","Delantero",1988,"Barcelona"],
+  ["Lautaro Martínez","Argentina","Delantero",1997,"Inter"],
+  ["Julián Álvarez","Argentina","Delantero",2000,"Atlético de Madrid"],
+  ["Ángel Di María","Argentina","Mediocampista",1988,"Rosario Central"],
+  ["Emiliano Martínez","Argentina","Arquero",1992,"Aston Villa"],
+  ["Paulo Dybala","Argentina","Delantero",1993,"Roma"],
+  ["Enzo Fernández","Argentina","Mediocampista",2001,"Chelsea"],
+  ["Alexis Mac Allister","Argentina","Mediocampista",1998,"Liverpool"],
+  ["Nicolás Otamendi","Argentina","Defensor",1988,"Benfica"],
+  ["Juan Román Riquelme","Argentina","Mediocampista",1978,"Boca Juniors"],
+  ["Carlos Tévez","Argentina","Delantero",1984,"Boca Juniors"],
+  ["Martín Palermo","Argentina","Delantero",1973,"Boca Juniors"],
+  ["Juan Sebastián Verón","Argentina","Mediocampista",1975,"Estudiantes"],
+  ["Javier Zanetti","Argentina","Defensor",1973,"Inter"],
+  ["Gabriel Batistuta","Argentina","Delantero",1969,"Al-Arabi"],
+  ["Hernán Crespo","Argentina","Delantero",1975,"Parma"],
+  ["Sergio Agüero","Argentina","Delantero",1988,"Barcelona"],
+  ["Pablo Aimar","Argentina","Mediocampista",1979,"Valencia"],
+  ["Javier Saviola","Argentina","Delantero",1981,"River Plate"],
+  ["Gonzalo Higuaín","Argentina","Delantero",1987,"Inter Miami"],
+  ["Ángel Correa","Argentina","Delantero",1995,"Atlético de Madrid"],
+  ["Marcos Acuña","Argentina","Defensor",1991,"River Plate"],
+  ["Nicolás De La Cruz","Uruguay","Mediocampista",1997,"Flamengo"],
+  ["Federico Valverde","Uruguay","Mediocampista",1998,"Real Madrid"],
+  ["Luis Suárez","Uruguay","Delantero",1987,"Inter Miami"],
+  ["Edinson Cavani","Uruguay","Delantero",1987,"Boca Juniors"],
+  ["Darwin Núñez","Uruguay","Delantero",1999,"Liverpool"],
+  ["Ronald Araújo","Uruguay","Defensor",1999,"Barcelona"],
+  ["Diego Forlán","Uruguay","Delantero",1979,"Peñarol"],
+  ["Diego Godín","Uruguay","Defensor",1986,"Vélez"],
+  ["Deyverson","Brasil","Delantero",1991,"Atlético Mineiro"],
+  ["Gabigol","Brasil","Delantero",1996,"Cruzeiro"],
+  ["Vinícius Tobias","Brasil","Defensor",2004,"Shakhtar"],
+  ["Rodrygo","Brasil","Delantero",2001,"Real Madrid"],
+  ["Raphinha","Brasil","Delantero",1996,"Barcelona"],
+  ["Casemiro","Brasil","Mediocampista",1992,"Manchester United"],
+  ["Alisson","Brasil","Arquero",1992,"Liverpool"],
+  ["Ederson","Brasil","Arquero",1993,"Manchester City"],
+  ["Thiago Silva","Brasil","Defensor",1984,"Fluminense"],
+  ["Marquinhos","Brasil","Defensor",1994,"PSG"],
+  ["Ronaldinho","Brasil","Mediocampista",1980,"Flamengo"],
+  ["Ronaldo Nazário","Brasil","Delantero",1976,"Corinthians"],
+  ["Kaká","Brasil","Mediocampista",1982,"Orlando City"],
+  ["Cafu","Brasil","Defensor",1970,"Milan"],
+  ["Roberto Carlos","Brasil","Defensor",1973,"Anzhi"],
+  ["Romário","Brasil","Delantero",1966,"Vasco da Gama"],
+  ["Zico","Brasil","Mediocampista",1953,"Kashima Antlers"],
+  ["Pelé","Brasil","Delantero",1940,"New York Cosmos"],
+  ["Endrick","Brasil","Delantero",2006,"Real Madrid"],
+  ["Estevão","Brasil","Delantero",2007,"Chelsea"],
+  ["James Rodríguez","Colombia","Mediocampista",1991,"León"],
+  ["Luis Díaz","Colombia","Delantero",1997,"Liverpool"],
+  ["Radamel Falcao","Colombia","Delantero",1986,"Millonarios"],
+  ["Juan Cuadrado","Colombia","Mediocampista",1988,"Pisa"],
+  ["Yerry Mina","Colombia","Defensor",1994,"Cagliari"],
+  ["Davinson Sánchez","Colombia","Defensor",1996,"Galatasaray"],
+  ["Alexis Sánchez","Chile","Delantero",1988,"Udinese"],
+  ["Arturo Vidal","Chile","Mediocampista",1987,"Colo-Colo"],
+  ["Claudio Bravo","Chile","Arquero",1983,"Barcelona"],
+  ["Gary Medel","Chile","Defensor",1987,"Universidad Católica"],
+  ["Christian Pulisic","Estados Unidos","Delantero",1998,"Milan"],
+  ["Weston McKennie","Estados Unidos","Mediocampista",1998,"Juventus"],
+  ["Alphonso Davies","Canadá","Defensor",2000,"Bayern Múnich"],
+  ["Jonathan David","Canadá","Delantero",2000,"Juventus"],
+  ["Heung-min Son","Corea del Sur","Delantero",1992,"Los Angeles FC"],
+  ["Takefusa Kubo","Japón","Delantero",2001,"Real Sociedad"],
+  ["Kaoru Mitoma","Japón","Delantero",1997,"Brighton"],
+  ["Mehdi Taremi","Irán","Delantero",1992,"Inter"],
+  ["Sadio Mané","Senegal","Delantero",1992,"Al-Nassr"],
+  ["Victor Osimhen","Nigeria","Delantero",1998,"Galatasaray"],
+  ["Riyad Mahrez","Argelia","Delantero",1991,"Al-Ahli"],
+  ["Achraf Hakimi","Marruecos","Defensor",1998,"PSG"],
+  ["Hakim Ziyech","Marruecos","Delantero",1993,"Wydad"],
+  ["David Alaba","Austria","Defensor",1992,"Real Madrid"],
+  ["Luka Modrić","Croacia","Mediocampista",1985,"Milan"],
+  ["Ivan Perišić","Croacia","Mediocampista",1989,"PSV"],
+  ["Joško Gvardiol","Croacia","Defensor",2002,"Manchester City"],
+  ["Marcelo Brozović","Croacia","Mediocampista",1992,"Al-Nassr"],
+  ["Kevin Strootman","Países Bajos","Mediocampista",1990,"Genoa"],
+  ["Virgil van Dijk","Países Bajos","Defensor",1991,"Liverpool"],
+  ["Frenkie de Jong","Países Bajos","Mediocampista",1997,"Barcelona"],
+  ["Memphis Depay","Países Bajos","Delantero",1994,"Corinthians"],
+  ["Arjen Robben","Países Bajos","Delantero",1984,"Groningen"],
+  ["Dennis Bergkamp","Países Bajos","Delantero",1969,"Arsenal"],
+  ["Ruud van Nistelrooy","Países Bajos","Delantero",1976,"Manchester United"],
+  ["Xavi","España","Mediocampista",1980,"Barcelona"],
+  ["Andrés Iniesta","España","Mediocampista",1984,"Vissel Kobe"],
+  ["Sergio Ramos","España","Defensor",1986,"Monterrey"],
+  ["Sergio Busquets","España","Mediocampista",1988,"Inter Miami"],
+  ["Carles Puyol","España","Defensor",1978,"Barcelona"],
+  ["Iker Casillas","España","Arquero",1981,"Real Madrid"],
+  ["David Villa","España","Delantero",1981,"Vissel Kobe"],
+  ["Fernando Torres","España","Delantero",1984,"Atlético de Madrid"],
+  ["Cesc Fàbregas","España","Mediocampista",1987,"Como"],
+  ["Pedri","España","Mediocampista",2002,"Barcelona"],
+  ["Gavi","España","Mediocampista",2004,"Barcelona"],
+  ["Nico Williams","España","Delantero",2002,"Athletic Club"],
+  ["Mikel Oyarzabal","España","Delantero",1997,"Real Sociedad"],
+  ["Thibaut Courtois","Bélgica","Arquero",1992,"Real Madrid"],
+  ["Eden Hazard","Bélgica","Delantero",1991,"Real Madrid"],
+  ["Romelu Lukaku","Bélgica","Delantero",1993,"Napoli"],
+  ["Jan Vertonghen","Bélgica","Defensor",1987,"Anderlecht"],
+  ["Manuel Neuer","Alemania","Arquero",1986,"Bayern Múnich"],
+  ["Toni Kroos","Alemania","Mediocampista",1990,"Real Madrid"],
+  ["Thomas Müller","Alemania","Delantero",1989,"Bayern Múnich"],
+  ["Mesut Özil","Alemania","Mediocampista",1988,"Fenerbahçe"],
+  ["Miroslav Klose","Alemania","Delantero",1978,"Lazio"],
+  ["Philipp Lahm","Alemania","Defensor",1983,"Bayern Múnich"],
+  ["Jamal Musiala","Alemania","Mediocampista",2003,"Bayern Múnich"],
+  ["Florian Wirtz","Alemania","Mediocampista",2003,"Liverpool"],
+  ["Kai Havertz","Alemania","Delantero",1999,"Arsenal"],
+  ["Harry Maguire","Inglaterra","Defensor",1993,"Manchester United"],
+  ["Bukayo Saka","Inglaterra","Delantero",2001,"Arsenal"],
+  ["Phil Foden","Inglaterra","Delantero",2000,"Manchester City"],
+  ["Declan Rice","Inglaterra","Mediocampista",1999,"Arsenal"],
+  ["Wayne Rooney","Inglaterra","Delantero",1985,"Manchester United"],
+  ["Steven Gerrard","Inglaterra","Mediocampista",1980,"Liverpool"],
+  ["Frank Lampard","Inglaterra","Mediocampista",1978,"Chelsea"],
+  ["David Beckham","Inglaterra","Mediocampista",1975,"Manchester United"],
+  ["Gareth Bale","Gales","Delantero",1989,"Real Madrid"],
+  ["Aaron Ramsey","Gales","Mediocampista",1990,"Cardiff City"],
+  ["Antoine Griezmann","Francia","Delantero",1991,"Atlético de Madrid"],
+  ["Ousmane Dembélé","Francia","Delantero",1997,"PSG"],
+  ["N'Golo Kanté","Francia","Mediocampista",1991,"Al-Ittihad"],
+  ["Paul Pogba","Francia","Mediocampista",1993,"Monaco"],
+  ["Karim Benzema","Francia","Delantero",1987,"Al-Ittihad"],
+  ["Zinedine Zidane","Francia","Mediocampista",1972,"Real Madrid"],
+  ["Thierry Henry","Francia","Delantero",1977,"Barcelona"],
+  ["Olivier Giroud","Francia","Delantero",1986,"Lille"],
+  ["William Saliba","Francia","Defensor",2001,"Arsenal"],
+  ["Mike Maignan","Francia","Arquero",1995,"Milan"],
+  ["Zlatan Ibrahimović","Suecia","Delantero",1981,"Milan"],
+  ["Henrik Larsson","Suecia","Delantero",1971,"Barcelona"],
+  ["Martin Ødegaard","Noruega","Mediocampista",1998,"Arsenal"],
+  ["Ole Gunnar Solskjær","Noruega","Delantero",1973,"Manchester United"],
+  ["Bruno Fernandes","Portugal","Mediocampista",1994,"Manchester United"],
+  ["Bernardo Silva","Portugal","Mediocampista",1994,"Manchester City"],
+  ["Rafael Leão","Portugal","Delantero",1999,"Milan"],
+  ["João Cancelo","Portugal","Defensor",1994,"Al-Hilal"],
+  ["Pepe","Portugal","Defensor",1983,"Porto"],
+  ["Luís Figo","Portugal","Mediocampista",1972,"Inter"],
+  ["Eusébio","Portugal","Delantero",1942,"Benfica"],
+  ["Andriy Shevchenko","Ucrania","Delantero",1976,"Milan"],
+  ["Serhiy Rebrov","Ucrania","Delantero",1974,"Tottenham"],
+  ["Wojciech Szczęsny","Polonia","Arquero",1990,"Barcelona"],
+  ["Piotr Zieliński","Polonia","Mediocampista",1994,"Inter"],
+  ["Gianluigi Buffon","Italia","Arquero",1978,"Parma"],
+  ["Paolo Maldini","Italia","Defensor",1968,"Milan"],
+  ["Francesco Totti","Italia","Delantero",1976,"Roma"],
+  ["Andrea Pirlo","Italia","Mediocampista",1979,"New York City"],
+  ["Giorgio Chiellini","Italia","Defensor",1984,"Los Angeles FC"],
+  ["Leonardo Bonucci","Italia","Defensor",1987,"Fenerbahçe"],
+  ["Jorginho","Italia","Mediocampista",1991,"Arsenal"],
+  ["Federico Chiesa","Italia","Delantero",1997,"Liverpool"],
+  ["Nicolò Barella","Italia","Mediocampista",1997,"Inter"],
+  ["Christian Vieri","Italia","Delantero",1973,"Atalanta"],
+  ["Alessandro Del Piero","Italia","Delantero",1974,"Juventus"],
+  ["Didier Drogba","Costa de Marfil","Delantero",1978,"Chelsea"],
+  ["Samuel Eto'o","Camerún","Delantero",1981,"Barcelona"],
+  ["George Weah","Liberia","Delantero",1966,"Milan"],
+  ["Yaya Touré","Costa de Marfil","Mediocampista",1983,"Manchester City"],
+  ["Michael Essien","Ghana","Mediocampista",1982,"Chelsea"],
+  ["Jay-Jay Okocha","Nigeria","Mediocampista",1973,"Bolton"],
+  ["Sofyan Amrabat","Marruecos","Mediocampista",1996,"Fenerbahçe"],
+  ["Yassine Bounou","Marruecos","Arquero",1991,"Al-Hilal"],
+  ["Keylor Navas","Costa Rica","Arquero",1986,"Newell's"],
+  ["Bryan Ruiz","Costa Rica","Mediocampista",1985,"Sporting"],
+  ["Moisés Caicedo","Ecuador","Mediocampista",2001,"Chelsea"],
+  ["Enner Valencia","Ecuador","Delantero",1989,"Pachuca"],
+  ["Antonio Valencia","Ecuador","Defensor",1985,"Manchester United"],
+  ["Pervis Estupiñán","Ecuador","Defensor",1998,"Brighton"],
+  ["Paolo Guerrero","Perú","Delantero",1984,"Alianza Lima"],
+  ["Claudio Pizarro","Perú","Delantero",1978,"Bayern Múnich"],
+  ["Jefferson Farfán","Perú","Delantero",1984,"Alianza Lima"],
+  ["Marcelo","Brasil","Defensor",1988,"Fluminense"],
+  ["Dani Alves","Brasil","Defensor",1983,"Barcelona"],
+  ["Thiago Motta","Italia","Mediocampista",1982,"PSG"],
+  ["David Silva","España","Mediocampista",1986,"Real Sociedad"],
+  ["Santi Cazorla","España","Mediocampista",1984,"Real Oviedo"],
+  ["Isco","España","Mediocampista",1992,"Real Betis"],
+  ["Fernando Morientes","España","Delantero",1976,"Real Madrid"],
+  ["Raúl","España","Delantero",1977,"Real Madrid"],
+  ["Xabi Alonso","España","Mediocampista",1981,"Real Madrid"],
+  ["Javier Mascherano","Argentina","Defensor",1984,"Estudiantes"],
+  ["Esteban Cambiasso","Argentina","Mediocampista",1980,"Inter"],
+  ["Walter Samuel","Argentina","Defensor",1978,"Inter"],
+  ["Diego Milito","Argentina","Delantero",1979,"Inter"],
+  ["Hugo Ibarra","Argentina","Defensor",1974,"Boca Juniors"],
+  ["Sebastián Battaglia","Argentina","Mediocampista",1980,"Boca Juniors"],
+  ["Guillermo Barros Schelotto","Argentina","Delantero",1973,"Boca Juniors"],
+  ["Marcelo Gallardo","Argentina","Mediocampista",1976,"River Plate"],
+  ["Ariel Ortega","Argentina","Delantero",1974,"River Plate"],
+  ["Enzo Francescoli","Uruguay","Delantero",1961,"River Plate"]
+].map(x => ({
+  n:x[0], c:x[1], p:x[2], y:x[3], club:x[4]
+}));
+
+const players = [...new Map(PLAYERS.map(p => [p.n,p])).values()];
+
+const $ = id => document.getElementById(id);
+const normalize = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+
+function todayKey(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+}
+
+function seedFromDate(){
+  const s = todayKey();
+  let h = 0;
+  for(let i=0;i<s.length;i++){
+    h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  }
+  return h;
+}
+
+const answer = players[seedFromDate() % players.length];
+
+$("date").textContent = new Intl.DateTimeFormat("es-AR", {dateStyle:"full"}).format(new Date());
+
+const DIFFICULTIES = {
+  hard:   { label: "Difícil", maxAttempts: 5, text: "Tenés 5 intentos para descubrir al jugador." },
+  normal: { label: "Normal", maxAttempts: 10, text: "Tenés 10 intentos para descubrir al jugador." },
+  easy:   { label: "Fácil", maxAttempts: Infinity, text: "Tenés intentos ilimitados." }
+};
+
+let difficulty = localStorage.getItem("fr_difficulty") || "normal";
+if(!DIFFICULTIES[difficulty]) difficulty = "normal";
+
+let attempts = [];
+let over = false;
+
+const key = "fr_daily_" + todayKey();
+const saved = JSON.parse(localStorage.getItem(key) || "null");
+
+if(saved){
+  attempts = saved.attempts || [];
+  over = !!saved.over;
+
+  // Si había una partida guardada de antes, respetamos su modo.
+  if(saved.difficulty && DIFFICULTIES[saved.difficulty]){
+    difficulty = saved.difficulty;
+  }
+}
+
+function getMaxAttempts(){
+  return DIFFICULTIES[difficulty].maxAttempts;
+}
+
+function saveGame(){
+  localStorage.setItem(key, JSON.stringify({
+    attempts,
+    over,
+    difficulty
+  }));
+}
+
+function updateDifficultyUI(){
+  document.querySelectorAll('input[name="difficulty"]').forEach(input => {
+    input.checked = input.value === difficulty;
+  });
+
+  $("difficultyDescription").textContent = DIFFICULTIES[difficulty].text;
+}
+
+function same(a,b){ return normalize(a) === normalize(b); }
+function samePosition(a,b){ return a === b; }
+function yearMatch(y1,y2){
+  if(y1 === y2) return "correct";
+  if(Math.abs(y1-y2) <= 3) return "partial";
+  return "incorrect";
+}
+function countryMatch(a,b){ return same(a,b) ? "correct" : "incorrect"; }
+function clubMatch(a,b){ return same(a,b) ? "correct" : "incorrect"; }
+
+function imageUrl(name){
+  const slug = name.trim().replace(/\s+/g,"_");
+  return `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(slug)}`;
+}
+
+async function loadAvatar(){
+  try{
+    const r = await fetch(imageUrl(answer.n));
+    const data = await r.json();
+    const src = data?.thumbnail?.source;
+    if(src){
+      $("avatar").innerHTML = `<img src="${src}" alt="${answer.n}">`;
+      return;
+    }
+  }catch(e){
+    console.error("No se pudo cargar la imagen:", e);
+  }
+  $("avatar").innerHTML = `<div class="fallback">?</div>`;
+}
+
+function addGuess(p){
+  attempts.push(p.n);
+  saveGame();
+  renderGuess(p);
+  $("counter").textContent = `Intentos: ${attempts.length}${getMaxAttempts() === Infinity ? "" : " / " + getMaxAttempts()}`;
+}
+
+function renderGuess(p){
+  const wrap = document.createElement("div");
+  wrap.className = "guess-card";
+  const yClass = yearMatch(p.y,answer.y);
+  const arrow = p.y < answer.y ? "↑" : p.y > answer.y ? "↓" : "✓";
+
+  wrap.innerHTML = `
+    <div class="guess-name">${p.n}</div>
+    <div class="pills">
+      <div class="pill ${countryMatch(p.c,answer.c)}">
+        <b>País</b> ${p.c}
+      </div>
+      <div class="pill ${samePosition(p.p,answer.p) ? "correct" : "incorrect"}">
+        <b>Posición</b> ${p.p}
+      </div>
+      <div class="pill ${yClass}">
+        <b>Nac.</b> ${p.y} ${arrow}
+      </div>
+      <div class="pill ${clubMatch(p.club,answer.club)}">
+        <b>Club</b> ${p.club}
+      </div>
+    </div>
+  `;
+  $("guesses").prepend(wrap);
+}
+
+function showWin(){
+  over = true;
+  loadAvatar();
+  saveGame();
+  $("result").className = "result win";
+  $("result").innerHTML = `
+    <h2>🎉 ¡La pegaste!</h2>
+    <p>Era <b>${answer.n}</b>. Mañana hay otro jugador.</p>
+  `;
+  $("search").disabled = true;
+  $("guessBtn").disabled = true;
+  $("giveUp").disabled = true;
+  $("firstHint").textContent = answer.n;
+  $("hintText").textContent = `${answer.c} · ${answer.p} · nacido en ${answer.y} · ${answer.club}`;
+  updateStats(true);
+}
+
+function showLose(){
+  over = true;
+  loadAvatar();
+  saveGame();
+  $("result").className = "result lose";
+  $("result").innerHTML = `
+    <h2>😵 Era ${answer.n}</h2>
+    <p>Mañana podés volver a intentarlo con un jugador nuevo.</p>
+  `;
+  $("search").disabled = true;
+  $("guessBtn").disabled = true;
+  $("giveUp").disabled = true;
+  $("firstHint").textContent = answer.n;
+  $("hintText").textContent = `${answer.c} · ${answer.p} · nacido en ${answer.y} · ${answer.club}`;
+  updateStats(false);
+}
+
+function updateStats(win){
+  let stats = JSON.parse(localStorage.getItem("fr_stats") || '{"played":0,"wins":0,"streak":0,"last":""}');
+  if(stats.last !== todayKey()){
+    stats.played++;
+    if(win){ stats.wins++; stats.streak++; }
+    else{ stats.streak = 0; }
+    stats.last = todayKey();
+    localStorage.setItem("fr_stats", JSON.stringify(stats));
+  }
+  $("played").textContent = stats.played;
+  $("wins").textContent = stats.wins;
+  $("streak").textContent = stats.streak;
+  $("rate").textContent = stats.played ? Math.round(stats.wins / stats.played * 100) + "%" : "0%";
+}
+
+(function(){
+  const stats = JSON.parse(localStorage.getItem("fr_stats") || '{"played":0,"wins":0,"streak":0,"last":""}');
+  $("played").textContent = stats.played;
+  $("wins").textContent = stats.wins;
+  $("streak").textContent = stats.streak;
+  $("rate").textContent = stats.played ? Math.round(stats.wins / stats.played * 100) + "%" : "0%";
+})();
+
+function suggestionsFor(value){
+  const q = normalize(value);
+  if(!q){ $("suggestions").style.display = "none"; return; }
+  const result = players.filter(p => normalize(p.n).includes(q)).slice(0,10);
+  if(!result.length){ $("suggestions").style.display = "none"; return; }
+  
+  $("suggestions").innerHTML = result.map((p,i)=>`
+    <div class="suggestion" data-name="${i}">
+      <span>${p.n}</span>
+      <small>${p.c} · ${p.p}</small>
+    </div>
+  `).join("");
+
+  [...$("suggestions").children].forEach((el,i)=>{
+    el.onclick = ()=>{
+      $("search").value = result[i].n;
+      $("suggestions").style.display = "none";
+    };
+  });
+  $("suggestions").style.display = "block";
+}
+
+function submit(){
+  if(over) return;
+  const value = $("search").value.trim();
+  if(!value) return;
+  
+  const p = players.find(x => same(x.n,value));
+  if(!p){
+    $("search").classList.remove("shake");
+    void $("search").offsetWidth;
+    $("search").classList.add("shake");
+    $("hintText").textContent = "Elegí un jugador de la lista de sugerencias.";
+    return;
+  }
+  if(attempts.some(n => same(n,p.n))){
+    $("hintText").textContent = "Ese jugador ya lo probaste.";
+    return;
+  }
+  
+  addGuess(p);
+  $("search").value = "";
+  $("suggestions").style.display = "none";
+
+  if(same(p.n,answer.n)){
+    showWin();
+  } else {
+    const maxAttempts = getMaxAttempts();
+
+    if(maxAttempts === Infinity){
+      $("hintText").textContent =
+        `No es. Te quedan intentos ilimitados.`;
+      return;
+    }
+
+    const remaining = maxAttempts - attempts.length;
+
+    if(remaining > 0){
+      $("hintText").textContent =
+        `No es. Te quedan ${remaining} intento${remaining === 1 ? "" : "s"}.`;
+    }else{
+      $("hintText").textContent = "Llegaste al límite de intentos.";
+      showLose();
+    }
+  }
+}
+
+document.querySelectorAll('input[name="difficulty"]').forEach(input => {
+  input.addEventListener("change", () => {
+    if(over) return;
+
+    difficulty = input.value;
+    localStorage.setItem("fr_difficulty", difficulty);
+    updateDifficultyUI();
+    saveGame();
+
+    const maxAttempts = getMaxAttempts();
+    if(maxAttempts === Infinity){
+      $("hintText").textContent = "Modo Fácil: podés seguir intentando sin límite.";
+    }else{
+      const remaining = Math.max(0, maxAttempts - attempts.length);
+      $("hintText").textContent = remaining > 0
+        ? `Modo ${DIFFICULTIES[difficulty].label}: te quedan ${remaining} intento${remaining === 1 ? "" : "s"}.`
+        : `Ya alcanzaste el límite del modo ${DIFFICULTIES[difficulty].label}.`;
+    }
+  });
+});
+
+updateDifficultyUI();
+
+$("search").addEventListener("input", e => suggestionsFor(e.target.value));
+$("search").addEventListener("keydown", e => { if(e.key === "Enter") submit(); });
+$("guessBtn").onclick = submit;
+$("giveUp").onclick = showLose;
+document.addEventListener("click", e => { if(!e.target.closest(".search")) $("suggestions").style.display = "none"; });
+
+if(saved){
+  updateDifficultyUI();
+
+  attempts.forEach(n => {
+    const p = players.find(x => same(x.n,n));
+    if(p) renderGuess(p);
+  });
+  $("counter").textContent = `Intentos: ${attempts.length}${getMaxAttempts() === Infinity ? "" : " / " + getMaxAttempts()}`;
+  if(over){
+    document.querySelectorAll('input[name="difficulty"]').forEach(input => input.disabled = true);
+    const win = attempts.some(n => same(n,answer.n));
+    loadAvatar();
+    $("result").className = "result " + (win ? "win" : "lose");
+    $("result").innerHTML = win
+      ? `<h2>🎉 ¡Ya lo acertaste!</h2><p>El jugador de hoy era <b>${answer.n}</b>.</p>`
+      : `<h2>😵 El jugador era ${answer.n}</h2><p>Volvé mañana para el próximo.</p>`;
+    $("search").disabled = true;
+    $("guessBtn").disabled = true;
+    $("giveUp").disabled = true;
+    $("firstHint").textContent = answer.n;
+    $("hintText").textContent = `${answer.c} · ${answer.p} · nacido en ${answer.y} · ${answer.club}`;
+  }
+}
+</script>
+
+</body>
+</html>

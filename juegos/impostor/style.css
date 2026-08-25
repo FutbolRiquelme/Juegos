@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+body {
+    text-align: center;
+    font-family: 'Poppins', Arial, sans-serif;
+    margin-top: 80px;
+    /* Fondo azul extremadamente oscuro basado en el escudo */
+    background: #060b14; 
+    color: #e0e6ed;
+}
+
+#banner {
+    width: 350px;
+    max-width: 90%;
+    margin-bottom: 20px;
+    /* Efecto de sombra para que el logo resalte sobre el fondo oscuro */
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+
+button {
+    padding: 12px 24px;
+    font-size: 20px;
+    cursor: pointer;
+    /* Amarillo/Oro extraído del escudo de Boca */
+    background: #eab521; 
+    color: #060b14; /* Texto azul muy oscuro para generar alto contraste */
+    border: none;
+    border-radius: 10px;
+    font-weight: 800;
+    transition: 0.3s ease;
+    text-transform: uppercase;
+    /* Resplandor dorado sutil */
+    box-shadow: 0 4px 12px rgba(234, 181, 33, 0.2); 
+}
+
+button:hover {
+    background: #facc43; /* Un amarillo apenas más brillante al pasar el mouse */
+    transform: scale(1.05);
+    box-shadow: 0 6px 18px rgba(234, 181, 33, 0.4);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+input {
+    font-family: 'Poppins', Arial, sans-serif;
+    font-size: 20px;
+    width: 60px;
+    text-align: center;
+    padding: 8px;
+    border-radius: 8px;
+    border: 2px solid #eab521; /* Borde oro */
+    background: #0f1a2e; /* Fondo azul marino para la caja de texto */
+    color: white;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+input:focus {
+    outline: none;
+    background: #152440;
+    box-shadow: 0 0 12px rgba(234, 181, 33, 0.5); /* Brillo oro al escribir */
+}
+
+#imagen {
+    display: block;
+    margin: 20px auto;
+    width: 300px;
+    max-width: 90%;
+    border-radius: 15px;
+    /* Borde oro y sombra dorada reemplazando al verde */
+    border: 3px solid #eab521;
+    box-shadow: 0 0 25px rgba(234, 181, 33, 0.35);
+    background: #0f1a2e;
+}
+
+#tituloJugador {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #eab521; /* Amarillo Boca */
+    font-weight: 800;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+#palabra {
+    font-size: 42px;
+    margin: 20px 0;
+    color: white;
+    font-weight: 800;
+    /* Sombra dorada brillante alrededor del texto blanco */
+    text-shadow: 0 0 15px rgba(234, 181, 33, 0.7);
+}
+
+p {
+    font-size: 24px;
+    font-weight: 600;
+    color: #b0c4de; /* Un celeste agrisado para textos secundarios */
+}

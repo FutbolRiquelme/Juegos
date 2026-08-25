@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Impostor Futbolero</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<img src="banner.png" id="banner">
+
+<div id="inicio">
+    <p>Cantidad de jugadores:</p>
+    <input type="number" id="cantidad" min="3" value="5">
+    <br><br>
+    <button onclick="empezar()">Empezar</button>
+</div>
+
+<div id="juego" style="display:none;">
+
+    <h2 id="tituloJugador"></h2>
+
+    <button id="verBtn" onclick="mostrarPalabra()">
+        Ver palabra
+    </button>
+
+    <h1 id="palabra" style="display:none;"></h1>
+
+    <!-- Imagen del jugador -->
+    <img id="imagen" style="display:none;">
+
+    <br><br>
+
+    <button id="siguienteBtn" style="display:none;" onclick="siguienteJugador()">
+        Ocultar y pasar al siguiente
+    </button>
+
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
