@@ -69,12 +69,12 @@ function generarRutaImagen(categoria) {
     
     // Verificamos en qué lista está para asignarle su carpeta correspondiente
     if (listaEquipos.includes(categoria)) {
-        return `file:///D:/FutbolRiquelme/imagenes/equipos/${nombreArchivo}`;
+        return `../../imagenes/equipos/${nombreArchivo}`;
     } else if (listaPaises.includes(categoria)) {
-        return `file:///D:/FutbolRiquelme/imagenes/paises/${nombreArchivo}`;
+        return `../../imagenes/paises/${nombreArchivo}`;
     } else {
         // Si no es equipo ni país, asume que es un título o premio
-        return `file:///D:/FutbolRiquelme/imagenes/titulos/${nombreArchivo}`;
+        return `../../imagenes/titulos/${nombreArchivo}`;
     }
 }
 
